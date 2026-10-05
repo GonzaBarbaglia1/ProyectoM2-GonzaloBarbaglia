@@ -2,22 +2,23 @@
   "name": "proyecto-m2-gonzalo-barbaglia",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start": "node --env-file=.env app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GonzaBarbaglia1/practica-javascript.git"
+    "url": "git+https://github.com/GonzaBarbaglia1/ProyectoM2-GonzaloBarbaglia.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/GonzaBarbaglia1/practica-javascript/issues"
+    "url": "https://github.com/GonzaBarbaglia1/ProyectoM2-GonzaloBarbaglia/issues"
   },
-  "homepage": "https://github.com/GonzaBarbaglia1/practica-javascript#readme",
+  "homepage": "https://github.com/GonzaBarbaglia1/ProyectoM2-GonzaloBarbaglia#readme",
   "dependencies": {
     "express": "^5.2.1",
     "pg": "^8.23.0"
