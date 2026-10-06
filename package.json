@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node --env-file=.env server.js",
+    "start": "node server.js",
     "test": "node --env-file=.env ./node_modules/jest/bin/jest.js --runInBand"
   },
   "repository": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/GonzaBarbaglia1/ProyectoM2-GonzaloBarbaglia#readme",
   "dependencies": {
+    "dotenv": "^18.0.6",
     "express": "^5.2.1",
     "pg": "^8.23.0",
     "swagger-jsdoc": "^6.3.0",
