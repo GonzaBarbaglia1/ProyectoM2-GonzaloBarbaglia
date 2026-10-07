@@ -18,14 +18,14 @@ const authorsService = require("../services/authors.service");
  *         description: Error interno del servidor
  */
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
     try {
         const authors = await authorsService.getAllAuthors();
 
         res.status(200).json(authors);
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener los autores" });
-    }
+         next(error);
+}
 });
 
 /**
@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
  *         description: Error interno del servidor
  */
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
     const id = req.params.id;
 
     try {
@@ -63,7 +63,7 @@ router.get("/:id", async (req, res) => {
 
         res.status(200).json(author);
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener el autor" });
+        next(error);
     }
 });
 
@@ -105,7 +105,7 @@ router.get("/:id", async (req, res) => {
  *         description: Error interno del servidor
  */
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
     const { name } = req.body;
 
     if (!name || name.trim() === "") {
@@ -121,7 +121,7 @@ router.post("/", async (req, res) => {
             return res.status(400).json({ error: "El email ya está registrado" });
         }
 
-        res.status(500).json({ error: "Error al crear el autor" });
+        next(error);
     }
 });
 
@@ -169,7 +169,7 @@ router.post("/", async (req, res) => {
  *         description: Error interno del servidor
  */
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req, res, next) => {
     const id = req.params.id;
     const { name } = req.body;
 
@@ -190,7 +190,7 @@ router.put("/:id", async (req, res) => {
             return res.status(400).json({ error: "El email ya está registrado" });
         }
 
-        res.status(500).json({ error: "Error al actualizar el autor" });
+        next(error);
     }
 });
 
@@ -217,7 +217,7 @@ router.put("/:id", async (req, res) => {
  *         description: Error interno del servidor
  */
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res,next) => {
     const id = req.params.id;
 
     try {
@@ -229,7 +229,7 @@ router.delete("/:id", async (req, res) => {
 
         res.status(204).send();
     } catch (error) {
-        res.status(500).json({ error: "Error al eliminar el autor" });
+        next(error);
     }
 });
 

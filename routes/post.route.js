@@ -19,14 +19,14 @@ const postsService = require("../services/post.service");
  */
 
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
     try {
         const posts = await postsService.getAllPosts();
 
         res.status(200).json(posts);
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener los posts" });
-    }
+    next(error);
+}
 });
 
 /**
@@ -52,7 +52,7 @@ router.get("/", async (req, res) => {
  *         description: Error interno del servidor
  */
 
-router.get("/author/:authorId", async (req, res) => {
+router.get("/author/:authorId", async (req, res, next) => {
     const authorId = req.params.authorId;
 
     try {
@@ -60,9 +60,7 @@ router.get("/author/:authorId", async (req, res) => {
 
         res.status(200).json(posts);
     } catch (error) {
-        res.status(500).json({
-            error: "Error al obtener los posts del autor"
-        });
+        next(error);
     }
 });
 
@@ -87,7 +85,7 @@ router.get("/author/:authorId", async (req, res) => {
  *         description: Error interno del servidor
  */
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
     const id = req.params.id;
 
     try {
@@ -99,7 +97,7 @@ router.get("/:id", async (req, res) => {
 
         res.status(200).json(post);
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener el post" });
+        next(error);
     }
 });
 
@@ -142,7 +140,7 @@ router.get("/:id", async (req, res) => {
  *         description: Error interno del servidor
  */
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
     const { author_id, title, content } = req.body;
 
     if (!author_id || !title || !content) {
@@ -157,7 +155,7 @@ router.post("/", async (req, res) => {
         res.status(201).json(post);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al crear el post" });
+        next(error);
     }
 });
 
@@ -206,7 +204,7 @@ router.post("/", async (req, res) => {
  */
 
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req, res, next) => {
     const id = req.params.id;
     const { author_id, title, content } = req.body;
 
@@ -231,7 +229,7 @@ router.put("/:id", async (req, res) => {
             });
         }
 
-        res.status(500).json({ error: "Error al actualizar el post" });
+        next(error);
     }
 });
 
@@ -258,7 +256,7 @@ router.put("/:id", async (req, res) => {
  *         description: Error interno del servidor
  */
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
     const id = req.params.id;
 
     try {
@@ -270,7 +268,7 @@ router.delete("/:id", async (req, res) => {
 
         res.status(204).json({ message: "Post eliminado correctamente" });
     } catch (error) {
-        res.status(500).json({ error: "Error al eliminar el post" });
+        next(error);
     }
 });
 
