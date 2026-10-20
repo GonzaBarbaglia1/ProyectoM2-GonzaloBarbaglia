@@ -4,6 +4,8 @@ const router = express.Router();
 
 const authorsService = require("../services/authors.service");
 
+const validateId = require("../middlewares/validateId");
+
 /**
  * @swagger
  * /authors:
@@ -24,8 +26,8 @@ router.get("/", async (req, res, next) => {
 
         res.status(200).json(authors);
     } catch (error) {
-         next(error);
-}
+        next(error);
+    }
 });
 
 /**
@@ -51,7 +53,7 @@ router.get("/", async (req, res, next) => {
  *         description: Error interno del servidor
  */
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", validateId, async (req, res, next) => {
     const id = req.params.id;
 
     try {
@@ -105,24 +107,39 @@ router.get("/:id", async (req, res, next) => {
  *         description: Error interno del servidor
  */
 
-router.post("/", async (req, res, next) => {
-    const { name } = req.body;
+    router.post("/", async (req, res, next) => {
+    const { name, email } = req.body;
 
-    if (!name || name.trim() === "") {
-        return res.status(400).json({ error: "El nombre es obligatorio" });
+    // Validar nombre obligatorio
+    if (typeof name !== "string" || name.trim() === "") {
+        return res.status(400).json({
+            error: "El nombre es obligatorio"
+        });
+    }
+
+    // Validar email obligatorio
+    if (typeof email !== "string" || email.trim() === "") {
+        return res.status(400).json({
+            error: "El email es obligatorio"
+        });
+    }
+
+    // Validar formato del email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({
+            error: "El formato del email no es válido"
+        });
     }
 
     try {
         const author = await authorsService.createAuthor(req.body);
 
         res.status(201).json(author);
-    } catch (error) {
-        if (error.code === "23505") {
-            return res.status(400).json({ error: "El email ya está registrado" });
-        }
-
-        next(error);
-    }
+  } catch (error) {
+    next(error);
+}
 });
 
 /**
@@ -169,13 +186,33 @@ router.post("/", async (req, res, next) => {
  *         description: Error interno del servidor
  */
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", validateId, async (req, res, next) => {
     const id = req.params.id;
-    const { name } = req.body;
 
-    if (!name || name.trim() === "") {
-        return res.status(400).json({ error: "El nombre es obligatorio" });
-    }
+const { name, email } = req.body;
+
+// Validar nombre obligatorio
+if (typeof name !== "string" || name.trim() === "") {
+    return res.status(400).json({
+        error: "El nombre es obligatorio"
+    });
+}
+
+// Validar email obligatorio
+if (typeof email !== "string" || email.trim() === "") {
+    return res.status(400).json({
+        error: "El email es obligatorio"
+    });
+}
+
+// Validar formato del email
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailRegex.test(email)) {
+    return res.status(400).json({
+        error: "El formato del email no es válido"
+    });
+}
 
     try {
         const author = await authorsService.updateAuthor(id, req.body);
@@ -185,11 +222,8 @@ router.put("/:id", async (req, res, next) => {
         }
 
         res.status(200).json(author);
-    } catch (error) {
-        if (error.code === "23505") {
-            return res.status(400).json({ error: "El email ya está registrado" });
-        }
-
+        
+      } catch (error) {
         next(error);
     }
 });
@@ -217,7 +251,7 @@ router.put("/:id", async (req, res, next) => {
  *         description: Error interno del servidor
  */
 
-router.delete("/:id", async (req, res,next) => {
+router.delete("/:id", validateId, async (req, res, next) => {
     const id = req.params.id;
 
     try {

@@ -4,6 +4,8 @@ const router = express.Router();
 
 const postsService = require("../services/post.service");
 
+const validateId = require("../middlewares/validateId");
+
 /**
  * @swagger
  * /posts:
@@ -25,8 +27,8 @@ router.get("/", async (req, res, next) => {
 
         res.status(200).json(posts);
     } catch (error) {
-    next(error);
-}
+        next(error);
+    }
 });
 
 /**
@@ -52,7 +54,7 @@ router.get("/", async (req, res, next) => {
  *         description: Error interno del servidor
  */
 
-router.get("/author/:authorId", async (req, res, next) => {
+router.get("/author/:authorId", validateId, async (req, res, next) => {
     const authorId = req.params.authorId;
 
     try {
@@ -63,7 +65,6 @@ router.get("/author/:authorId", async (req, res, next) => {
         next(error);
     }
 });
-
 /**
  * @swagger
  * /posts/author/{authorId}:
@@ -85,14 +86,16 @@ router.get("/author/:authorId", async (req, res, next) => {
  *         description: Error interno del servidor
  */
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", validateId, async (req, res, next) => {
     const id = req.params.id;
 
     try {
         const post = await postsService.getPostById(id);
 
         if (!post) {
-            return res.status(404).json({ error: "Post no encontrado" });
+            return res.status(404).json({
+                error: "Post no encontrado"
+            });
         }
 
         res.status(200).json(post);
@@ -154,9 +157,12 @@ router.post("/", async (req, res, next) => {
 
         res.status(201).json(post);
     } catch (error) {
-        console.error(error);
-        next(error);
+    if (error.code === "23503") {
+        error.operation = "createPost";
     }
+
+    next(error);
+}
 });
 
 /**
@@ -204,7 +210,7 @@ router.post("/", async (req, res, next) => {
  */
 
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", validateId, async (req, res, next) => {
     const id = req.params.id;
     const { author_id, title, content } = req.body;
 
@@ -223,14 +229,12 @@ router.put("/:id", async (req, res, next) => {
 
         res.status(200).json(post);
     } catch (error) {
-        if (error.code === "23503") {
-            return res.status(400).json({
-                error: "El autor indicado no existe"
-            });
-        }
-
-        next(error);
+    if (error.code === "23503") {
+        error.operation = "updatePost";
     }
+
+    next(error);
+}
 });
 
 /**
@@ -256,7 +260,7 @@ router.put("/:id", async (req, res, next) => {
  *         description: Error interno del servidor
  */
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", validateId, async (req, res, next) => {
     const id = req.params.id;
 
     try {
@@ -266,7 +270,7 @@ router.delete("/:id", async (req, res, next) => {
             return res.status(404).json({ error: "Post no encontrado" });
         }
 
-        res.status(204).json({ message: "Post eliminado correctamente" });
+       res.status(204).send();
     } catch (error) {
         next(error);
     }

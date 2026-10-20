@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS authors (
 
 CREATE TABLE IF NOT EXISTS posts (
     id SERIAL PRIMARY KEY,
-    author_id INTEGER NOT NULL REFERENCES authors(id),
+    author_id INTEGER NOT NULL REFERENCES authors(id) ON DELETE CASCADE, 
     title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
     published BOOLEAN DEFAULT FALSE,
