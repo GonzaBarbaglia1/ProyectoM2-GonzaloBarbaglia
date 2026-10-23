@@ -33,40 +33,6 @@ router.get("/", async (req, res, next) => {
 
 /**
  * @swagger
- * /posts/{id}:
- *   get:
- *     summary: Obtener un post por ID
- *     tags:
- *       - Posts
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID del post
- *     responses:
- *       200:
- *         description: Post encontrado correctamente
- *       404:
- *         description: Post no encontrado
- *       500:
- *         description: Error interno del servidor
- */
-
-router.get("/author/:authorId", validateId, async (req, res, next) => {
-    const authorId = req.params.authorId;
-
-    try {
-        const posts = await postsService.getPostsByAuthor(authorId);
-
-        res.status(200).json(posts);
-    } catch (error) {
-        next(error);
-    }
-});
-/**
- * @swagger
  * /posts/author/{authorId}:
  *   get:
  *     summary: Obtener los posts de un autor con los datos del autor
@@ -82,6 +48,44 @@ router.get("/author/:authorId", validateId, async (req, res, next) => {
  *     responses:
  *       200:
  *         description: Posts del autor obtenidos correctamente
+ *       500:
+ *         description: Error interno del servidor
+ */
+
+
+router.get("/author/:authorId", validateId, async (req, res, next) => {
+    const authorId = req.params.authorId;
+
+    try {
+        const posts = await postsService.getPostsByAuthor(authorId);
+
+        res.status(200).json(posts);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /posts/{id}:
+ *   get:
+ *     summary: Obtener un post por ID
+ *     tags:
+ *       - Posts
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del post
+ *     responses:
+ *       200:
+ *         description: Post encontrado correctamente
+ *       400:
+ *         description: El ID debe ser un número entero positivo
+ *       404:
+ *         description: Post no encontrado
  *       500:
  *         description: Error interno del servidor
  */

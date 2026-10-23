@@ -80,4 +80,27 @@ describe("Endpoints de Posts", () => {
 
     expect(deleteResponse.status).toBe(204);
 });
+
+test("POST /posts debe devolver 400 si el autor no existe", async () => {
+    const response = await request(app)
+        .post("/posts")
+        .send({
+            author_id: 99999,
+            title: "Publicación de prueba",
+            content: "Probando un autor inexistente",
+            published: true
+        });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe("El autor indicado no existe");
+});
+
+test("GET /posts/:id debe devolver 400 si el ID no es válido", async () => {
+    const response = await request(app).get("/posts/abc");
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe(
+        "El ID debe ser un número entero positivo"
+    );
+});
 });

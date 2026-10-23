@@ -18,13 +18,15 @@ El proyecto permite realizar operaciones CRUD sobre las entidades `authors` y `p
 
 ## Estructura del proyecto
 
-```text
+
 database/
 ├── schema.sql
-└── seed.sql
+├── seed.sql
+└── migration_001_cascade.sql
 
 middlewares/
-└── errorHandler.js
+├── errorHandler.js
+└── validateId.js
 
 routes/
 ├── authors.route.js
@@ -42,10 +44,13 @@ app.js
 db.js
 server.js
 swagger.js
+generate-openapi.js
+openapi.yaml
 .env.example
 .gitignore
 package.json
-```
+README.md
+
 
 ## Instalación
 
@@ -166,35 +171,70 @@ Ejecutar:
 npm test
 ```
 
-Actualmente el proyecto cuenta con 2 suites y 11 tests automatizados.
+Actualmente el proyecto cuenta con **2 suites y 17 tests automatizados**, desarrollados con Jest y Supertest.
+
+Las pruebas verifican las operaciones CRUD de autores y publicaciones, las validaciones de datos obligatorios, el formato de los emails, los IDs inválidos, los emails duplicados, las referencias a autores inexistentes y el manejo de JSON malformado.
 
 ## Swagger / OpenAPI
 
-La documentación interactiva de la API está disponible localmente en:
+La API cuenta con documentación interactiva mediante Swagger UI y una especificación OpenAPI 3.0.
 
-```text
+La documentación puede consultarse localmente en:
+
 http://localhost:3000/api-docs
+
+Desde Swagger se pueden consultar y probar los **11 endpoints** de autores y publicaciones.
+
+Además, el proyecto incluye el archivo `openapi.yaml`, que contiene la especificación de la API en formato YAML.
+
+Para actualizar este archivo después de modificar los comentarios de Swagger en las rutas, ejecutar:
+
+```bash
+node generate-openapi.js
 ```
 
-Desde Swagger se pueden consultar y probar los endpoints de Authors y Posts.
+La documentación también está disponible en Railway:
+
+https://proyectom2-gonzalobarbaglia-production.up.railway.app/api-docs
 
 ## Deployment
 
-La aplicación y la base de datos PostgreSQL se encuentran desplegadas en Railway.
+La API REST y la base de datos PostgreSQL se encuentran desplegadas en **Railway**, dentro del entorno de producción.
 
-API:
+**API publicada:**
 
-```text
 https://proyectom2-gonzalobarbaglia-production.up.railway.app
-```
 
-Swagger:
+**Documentación Swagger:**
 
-```text
 https://proyectom2-gonzalobarbaglia-production.up.railway.app/api-docs
-```
 
-En producción las variables de entorno son administradas por Railway y no mediante el archivo `.env`.
+### Configuración del despliegue
+
+El proyecto utiliza dos servicios en Railway:
+
+- **Aplicación Node.js:** ejecuta el servidor Express y expone los endpoints de la API.
+- **PostgreSQL:** almacena la información de autores y publicaciones.
+
+La configuración de conexión se realiza mediante variables de entorno definidas en Railway, utilizando los valores correspondientes a la base de datos de producción.
+
+Las credenciales no se incluyen en el repositorio de GitHub.
+
+### Base de datos en producción
+
+La base de datos utiliza las tablas `authors` y `posts`, relacionadas mediante una clave foránea.
+
+La relación implementa `ON DELETE CASCADE`, de manera que, cuando se elimina un autor, también se eliminan sus publicaciones asociadas.
+
+Los cambios estructurales de esta relación se documentan en `database/migration_001_cascade.sql`.
+
+### Actualización de la aplicación
+
+El código fuente se administra mediante Git y GitHub. Para publicar nuevas modificaciones, se deben guardar los cambios, crear un commit y subirlos al repositorio.
+
+Si el servicio de Railway tiene habilitado el despliegue automático desde GitHub, los nuevos commits de la rama configurada generan un nuevo despliegue.
+
+Las modificaciones de estructura de PostgreSQL requieren ejecutar las migraciones correspondientes; no se aplican automáticamente por subir código a GitHub.
 
 ## Relación entre entidades
 

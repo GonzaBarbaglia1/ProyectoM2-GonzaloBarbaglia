@@ -47,6 +47,8 @@ router.get("/", async (req, res, next) => {
  *     responses:
  *       200:
  *         description: Autor encontrado correctamente
+ *       400:
+ *         description: El ID debe ser un número entero positivo
  *       404:
  *         description: Autor no encontrado
  *       500:
@@ -101,7 +103,7 @@ router.get("/:id", validateId, async (req, res, next) => {
  *     responses:
  *       201:
  *         description: Autor creado correctamente
- *       400:
+ *       409:
  *         description: Datos inválidos o email ya existente
  *       500:
  *         description: Error interno del servidor
