@@ -113,6 +113,7 @@ router.get("/:id", validateId, async (req, res, next) => {
  * /posts:
  *   post:
  *     summary: Crear un nuevo post
+ *     description: Crea una publicación asociada a un autor existente. El campo published es opcional y, si se omite, toma el valor false.
  *     tags:
  *       - Posts
  *     requestBody:
@@ -137,12 +138,32 @@ router.get("/:id", validateId, async (req, res, next) => {
  *                 example: Contenido del post
  *               published:
  *                 type: boolean
- *                 example: true
+ *                 default: false
+ *                 description: Indica si el post está publicado. Solo acepta true o false.
+ *                 example: false
  *     responses:
  *       201:
  *         description: Post creado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 author_id:
+ *                   type: integer
+ *                 title:
+ *                   type: string
+ *                 content:
+ *                   type: string
+ *                 published:
+ *                   type: boolean
+ *                 created_at:
+ *                   type: string
+ *                   format: date-time
  *       400:
- *         description: Faltan datos obligatorios
+ *         description: Faltan datos obligatorios, published no es booleano o el autor indicado no existe
  *       500:
  *         description: Error interno del servidor
  */
