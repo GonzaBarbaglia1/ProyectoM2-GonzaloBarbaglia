@@ -103,4 +103,34 @@ test("GET /posts/:id debe devolver 400 si el ID no es válido", async () => {
         "El ID debe ser un número entero positivo"
     );
 });
+test("POST /posts devuelve 400 si published es null", async () => {
+    const response = await request(app)
+        .post("/posts")
+        .send({
+            author_id: 1,
+            title: "Prueba published",
+            content: "Validación de valor nulo",
+            published: null
+        });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+        error: "El campo published debe ser true o false"
+    });
+});
+test("PUT /posts/:id devuelve 400 si published es null", async () => {
+    const response = await request(app)
+        .put("/posts/1")
+        .send({
+            author_id: 1,
+            title: "Post actualizado",
+            content: "Probando published null",
+            published: null
+        });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+        error: "El campo published debe ser true o false"
+    });
+});
 });

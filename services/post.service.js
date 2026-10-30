@@ -29,7 +29,7 @@ const createPost = async (postData) => {
 };
 
 const updatePost = async (id, postData) => {
-    const { author_id, title, content, published } = postData;
+    const { author_id, title, content, published = false } = postData;
 
     const result = await pool.query(
         `UPDATE posts

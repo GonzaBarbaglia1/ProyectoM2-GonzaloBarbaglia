@@ -1,0 +1,10 @@
+BEGIN;
+
+UPDATE posts
+SET published = FALSE
+WHERE published IS NULL;
+
+ALTER TABLE posts
+ALTER COLUMN published SET NOT NULL;
+
+COMMIT;

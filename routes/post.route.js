@@ -155,7 +155,14 @@ router.post("/", async (req, res, next) => {
             error: "author_id, title y content son obligatorios"
         });
     }
-
+    if (
+    req.body.published !== undefined &&
+    typeof req.body.published !== "boolean"
+    ) {
+    return res.status(400).json({
+        error: "El campo published debe ser true o false"
+    });
+    }
     try {
         const post = await postsService.createPost(req.body);
 
@@ -222,6 +229,14 @@ router.put("/:id", validateId, async (req, res, next) => {
         return res.status(400).json({
             error: "author_id, title y content son obligatorios"
         });
+    }
+    if (
+    req.body.published !== undefined &&
+    typeof req.body.published !== "boolean"
+    )   {
+    return res.status(400).json({
+        error: "El campo published debe ser true o false"
+    });
     }
 
     try {

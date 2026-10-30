@@ -23,7 +23,11 @@ app.use("/posts", postsRouter);
 app.get("/", (req, res) => {
     res.status(200).json({ message: "API funcionando correctamente" });
 });
-
+app.use((req, res) => {
+    res.status(404).json({
+        error: "Ruta no encontrada"
+    });
+});
 app.use(errorHandler);
 
 module.exports = app;
