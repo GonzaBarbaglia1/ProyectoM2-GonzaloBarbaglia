@@ -18,11 +18,11 @@ El proyecto permite realizar operaciones CRUD sobre las entidades `authors` y `p
 
 ## Estructura del proyecto
 
-
 database/
 ├── schema.sql
 ├── seed.sql
-└── migration_001_cascade.sql
+├── migration_001_cascade.sql
+└── migration_002_published_not_null.sql
 
 middlewares/
 ├── errorHandler.js
@@ -90,23 +90,20 @@ El archivo `.env` contiene información sensible y no debe subirse al repositori
 
 ## Base de datos
 
-Crear en PostgreSQL una base de datos llamada:
+Crear en PostgreSQL una base de datos llamada `proyecto_m2`.
 
-```text
-proyecto_m2
-```
+Luego ejecutar el archivo `database/schema.sql` sobre esa base para crear las tablas.
 
-Luego ejecutar el script de creación de tablas:
+Se puede realizar de dos maneras:
+
+- **Desde pgAdmin:** abrir el archivo `database/schema.sql` en el Query Tool de la base `proyecto_m2` y ejecutarlo.
+- **Desde psql:** ejecutar el siguiente comando desde la carpeta raíz del proyecto:
 
 ```sql
 \i database/schema.sql
 ```
 
-Para cargar los datos iniciales:
-
-```sql
-\i database/seed.sql
-```
+Para cargar los datos iniciales, ejecutar `database/seed.sql` sobre la misma base de datos, utilizando pgAdmin o psql.
 
 El seed puede ejecutarse nuevamente sin duplicar los datos iniciales.
 
@@ -259,6 +256,10 @@ La base de datos utiliza las tablas `authors` y `posts`, relacionadas mediante u
 La relación implementa `ON DELETE CASCADE`, de manera que, cuando se elimina un autor, también se eliminan sus publicaciones asociadas.
 
 Los cambios estructurales de esta relación se documentan en `database/migration_001_cascade.sql`.
+
+Además, se implementó la migración `database/migration_002_published_not_null.sql`, que establece la restricción `NOT NULL` sobre el campo `published` de la tabla `posts`.
+
+Esta migración permite garantizar que todas las publicaciones tengan un estado de publicación definido (`true` o `false`), evitando valores nulos en la base de datos.
 
 ### Actualización de la aplicación
 
