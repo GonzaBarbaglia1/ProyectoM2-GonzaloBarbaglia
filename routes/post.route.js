@@ -202,6 +202,7 @@ router.post("/", async (req, res, next) => {
  * /posts/{id}:
  *   put:
  *     summary: Actualizar un post
+ *     description: Actualiza una publicación existente. Requiere author_id, title y content. Si se omite published, toma el valor false.
  *     tags:
  *       - Posts
  *     parameters:
@@ -210,13 +211,18 @@ router.post("/", async (req, res, next) => {
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID del post
+ *           minimum: 1
+ *         description: ID del post que se desea actualizar
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - author_id
+ *               - title
+ *               - content
  *             properties:
  *               author_id:
  *                 type: integer
@@ -229,18 +235,19 @@ router.post("/", async (req, res, next) => {
  *                 example: Contenido actualizado
  *               published:
  *                 type: boolean
+ *                 default: false
+ *                 description: Solo acepta true o false. Si se omite, toma el valor false.
  *                 example: true
  *     responses:
  *       200:
  *         description: Post actualizado correctamente
  *       400:
- *         description: Datos inválidos
+ *         description: ID inválido, datos obligatorios faltantes, published no booleano o autor inexistente
  *       404:
  *         description: Post no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-
 
 router.put("/:id", validateId, async (req, res, next) => {
     const id = req.params.id;
