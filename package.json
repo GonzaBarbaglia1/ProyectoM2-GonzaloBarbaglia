@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "scripts": {
-    "start": "node server.js",
-    "test": "node --env-file=.env ./node_modules/jest/bin/jest.js --runInBand"
-  },
+"scripts": {
+  "start": "node server.js",
+  "test": "node --env-file=.env.test ./node_modules/jest/bin/jest.js --runInBand"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GonzaBarbaglia1/ProyectoM2-GonzaloBarbaglia.git"

@@ -163,17 +163,49 @@ Las consultas SQL utilizan parámetros (`$1`, `$2`, etc.) para evitar concatenac
 
 ## Tests
 
-Los endpoints están testeados utilizando Jest y Supertest.
+Los endpoints están testeados utilizando **Jest y Supertest**.
 
-Ejecutar:
+Actualmente, el proyecto cuenta con **2 suites y 19 tests automatizados**.
+
+Las pruebas verifican las operaciones CRUD de autores y publicaciones, las validaciones de datos obligatorios, el formato de los emails, los IDs inválidos, los emails duplicados, las referencias a autores inexistentes, el manejo de JSON malformado y la validación del campo `published`.
+
+### Configuración de la base de datos de pruebas
+
+Para evitar modificar los datos de desarrollo, los tests utilizan una base de datos PostgreSQL independiente.
+
+**1. Crear la base de datos**
+
+Crear una base de datos llamada `proyecto_m2_test` en PostgreSQL.
+
+**2. Crear las tablas**
+
+Ejecutar el archivo `database/schema.sql` sobre la base `proyecto_m2_test`.
+
+**3. Configurar las variables de entorno**
+
+Crear un archivo `.env.test` en la raíz del proyecto, utilizando esta estructura:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=tu_password
+DB_NAME=proyecto_m2_test
+```
+
+Reemplazar `tu_password` por la contraseña local de PostgreSQL.
+
+El archivo `.env.test` está incluido en `.gitignore` para evitar publicar credenciales.
+
+**4. Ejecutar las pruebas**
 
 ```bash
 npm test
 ```
 
-Actualmente el proyecto cuenta con **2 suites y 17 tests automatizados**, desarrollados con Jest y Supertest.
+El comando utiliza la configuración de `.env.test` y ejecuta las pruebas de forma secuencial mediante `--runInBand`.
 
-Las pruebas verifican las operaciones CRUD de autores y publicaciones, las validaciones de datos obligatorios, el formato de los emails, los IDs inválidos, los emails duplicados, las referencias a autores inexistentes y el manejo de JSON malformado.
+**Resultado esperado:** 2 suites y 19 tests aprobados.
 
 ## Swagger / OpenAPI
 

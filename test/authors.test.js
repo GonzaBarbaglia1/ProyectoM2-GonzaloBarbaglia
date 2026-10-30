@@ -12,20 +12,69 @@ test("GET /authors debe devolver todos los autores", async () => {
     });
 
 test("GET /authors/:id debe devolver un autor", async () => {
-        const response = await request(app).get("/authors/1");
+    let authorId;
+
+    try {
+        const createResponse = await request(app)
+            .post("/authors")
+            .send({
+                name: "Autor GET",
+                apellido: "Test",
+                email: `autor.get.${Date.now()}@test.com`,
+                bio: "Autor creado para probar GET"
+            });
+
+        expect(createResponse.status).toBe(201);
+        authorId = createResponse.body.id;
+
+        const response = await request(app)
+            .get(`/authors/${authorId}`);
 
         expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty("id");
-        expect(response.body).toHaveProperty("name");
+        expect(response.body.id).toBe(authorId);
+        expect(response.body.name).toBe("Autor GET");
         expect(response.body).toHaveProperty("email");
-    });
+
+    } finally {
+        if (authorId) {
+            await request(app).delete(`/authors/${authorId}`);
+        }
+    }
+});
 
 test("GET /authors/:id debe devolver 404 si el autor no existe", async () => {
-        const response = await request(app).get("/authors/99999");
+    let authorId;
+
+    try {
+        const createResponse = await request(app)
+            .post("/authors")
+            .send({
+                name: "Autor Temporal",
+                apellido: "Test",
+                email: `autor.temporal.${Date.now()}@test.com`,
+                bio: "Prueba de autor inexistente"
+            });
+
+        expect(createResponse.status).toBe(201);
+        authorId = createResponse.body.id;
+
+        const deleteResponse = await request(app)
+            .delete(`/authors/${authorId}`);
+
+        expect(deleteResponse.status).toBe(204);
+
+        const response = await request(app)
+            .get(`/authors/${authorId}`);
 
         expect(response.status).toBe(404);
         expect(response.body.error).toBe("Autor no encontrado");
-    });
+
+    } finally {
+        if (authorId) {
+            await request(app).delete(`/authors/${authorId}`);
+        }
+    }
+});
 
 test("GET /authors/:id debe devolver 400 si el ID no es válido", async () => {
     const response = await request(app).get("/authors/abc");
