@@ -17,7 +17,7 @@ El proyecto permite realizar operaciones CRUD sobre las entidades `authors` y `p
 - Railway
 
 ## Estructura del proyecto
-
+```text
 ProyectoM2-GonzaloBarbaglia/
 ├── database/
 │   ├── schema.sql
