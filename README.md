@@ -18,39 +18,34 @@ El proyecto permite realizar operaciones CRUD sobre las entidades `authors` y `p
 
 ## Estructura del proyecto
 
-database/
-├── schema.sql
-├── seed.sql
-├── migration_001_cascade.sql
-└── migration_002_published_not_null.sql
-
-middlewares/
-├── errorHandler.js
-└── validateId.js
-
-routes/
-├── authors.route.js
-└── post.route.js
-
-services/
-├── authors.service.js
-└── post.service.js
-
-test/
-├── authors.test.js
-└── post.test.js
-
-app.js
-db.js
-server.js
-swagger.js
-generate-openapi.js
-openapi.yaml
-.env.example
-.gitignore
-package.json
-README.md
-
+ProyectoM2-GonzaloBarbaglia/
+├── database/
+│   ├── schema.sql
+│   ├── seed.sql
+│   ├── migration_001_cascade.sql
+│   └── migration_002_published_not_null.sql
+├── middlewares/
+│   ├── errorHandler.js
+│   └── validateId.js
+├── routes/
+│   ├── authors.route.js
+│   └── post.route.js
+├── services/
+│   ├── authors.service.js
+│   └── post.service.js
+├── test/
+│   ├── authors.test.js
+│   └── post.test.js
+├── app.js
+├── db.js
+├── server.js
+├── swagger.js
+├── generate-openapi.js
+├── openapi.yaml
+├── .env.example
+├── .gitignore
+├── package.json
+└── README.md
 
 ## Instalación
 
